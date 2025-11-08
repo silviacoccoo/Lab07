@@ -36,9 +36,12 @@ class View:
         self.txt_titolo = ft.Text(value="Musei di Torino", size=38, weight=ft.FontWeight.BOLD)
 
         # --- Sezione 2: Filtraggio ---
+
         # TODO
 
         # Sezione 3: Artefatti
+        btn_artefatti=ft.ElevatedButton(text="Mostra artefatti", on_click=self.controller.mostra_artefatti)
+        self.lista_artefatti=ft.ListView(expand=True, spacing=5, padding=10, auto_scroll=True)
         # TODO
 
         # --- Toggle Tema ---
@@ -53,9 +56,13 @@ class View:
             ft.Divider(),
 
             # Sezione 2: Filtraggio
+            ft.Divider(),
+
             # TODO
 
             # Sezione 3: Artefatti
+            btn_artefatti,
+            self.lista_artefatti,
             # TODO
         )
 
