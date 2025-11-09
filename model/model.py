@@ -1,6 +1,6 @@
 from database.museo_DAO import MuseoDAO
 from database.artefatto_DAO import ArtefattoDAO
-from database.DB_connect import ConnessioneDB as db
+from database.DB_connect import ConnessioneDB
 '''
     MODELLO: 
     - Rappresenta la struttura dati
