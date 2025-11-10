@@ -18,9 +18,39 @@ class Controller:
         self.epoca_selezionata = None
 
     # POPOLA DROPDOWN
+    def popola_dropdown(self,e=None):
+        musei=self._model.get_musei() # Otteniamo i musei
+
+        option_musei=[ft.dropdown.Option(key=None, text='Nessun filtro')]
+
+        if musei: # Se esiste la lista di musei
+            for museo in musei:
+                option_musei.append(ft.dropdown.Option(key=museo.nome, text=museo.nome)) # Aggiungo il museo ai musei attraverso il comando ft.dropdown.Option
+
+        self._view.dropdown_musei.options=option_musei # Aggiungo la lista di opzioni di musei al controllo dropdown
+        self._view.dropdown_musei.value=None # Questa è l'opzione di default
+
+        epoche=self._model.get_epoche() # Otteniamo le epoche
+        option_epoche=[]
+        if epoche:
+            for epoca in epoche:
+                if epoca == 'Nessun filtro':
+                    option_epoche.append(ft.dropdown.Option(key=None, text='Nessun filtro'))
+                else:
+                    option_epoche.append(ft.dropdown.Option(key=epoca, text=epoca))
+        self._view.dropdown_epoche.options=option_epoche
+        self._view.dropdown_epoche.value=None
+        self._view.update()
     # TODO
 
     # CALLBACKS DROPDOWN
+    def seleziona_museo(self,e):
+        self.museo_selezionato = e.control.value
+        print('Museo selezionato: ',self.museo_selezionato)
+
+    def seleziona_epoca(self,e):
+        self.epoca_selezionata = e.control.value
+        print('Epoca: ',self.epoca_selezionata)
     # TODO
 
     # AZIONE: MOSTRA ARTEFATTI

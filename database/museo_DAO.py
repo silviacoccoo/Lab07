@@ -8,10 +8,10 @@ from model.museoDTO import Museo
 
 class MuseoDAO:
     def __init__(self):
-        self.connection=ConnessioneDB().get_connection()
+        pass
 
     def get_musei(self):
-        conn=self.connection
+        conn=ConnessioneDB.get_connection()
         risultato=[]
 
         if conn is None:
@@ -19,10 +19,11 @@ class MuseoDAO:
             return []
 
         try:
-            cursor=conn.cursor()
+            cursor=conn.cursor(dictionary=True)
             query="""
             SELECT *
             FROM musei_torino.museo 
+            ORDER BY nome
             """
             cursor.execute(query)
 

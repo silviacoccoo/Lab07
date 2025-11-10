@@ -1,6 +1,7 @@
 from database.museo_DAO import MuseoDAO
 from database.artefatto_DAO import ArtefattoDAO
-from database.DB_connect import ConnessioneDB
+from model.museoDTO import Museo
+from database.DB_connect import ConnessioneDB as db
 '''
     MODELLO: 
     - Rappresenta la struttura dati
@@ -16,45 +17,20 @@ class Model:
     # --- ARTEFATTI ---
     def get_artefatti_filtrati(self, museo:str, epoca:str):
         """Restituisce la lista di tutti gli artefatti filtrati per museo e/o epoca (filtri opzionali)."""
-
-        if museo and epoca:
-            conn=None
-            cursor=None
-
-            conn=db.get_connection()
-
-            if conn is None:
-                print('Errore nella connessione con il database')
-                return None
-
-            # Else, quindi se si è stabilita la connessione
-            cursor = conn.cursor(dictionary=True)
-            query='SELECT * FROM musei_torino.artefatto'
-            cursor.execute(query)
-
-            query2='SELECT * FROM musei_torino.artefatto WHERE museo=COALESCE(%s, museo) AND epoca=COALESCE(%s, epoca)'
-            cursor.execute(query2)
-
-            result=[]
-            for row in cursor:
-                result.append(row)
-
-        else:
-            return None
-
-        cursor.close()
-        conn.close()
-
+        return self._artefatto_dao.estrai_artefatto(museo, epoca)
         # TODO
 
     def get_epoche(self):
         """Restituisce la lista di tutte le epoche."""
-
+        epoche_db=self._artefatto_dao.dividi_per_epoche() # Recupero le epoche
+        epoche_db.insert(0, 'Nessun filtro')
+        return epoche_db
         # TODO
 
     # --- MUSEI ---
     def get_musei(self):
         """ Restituisce la lista di tutti i musei."""
-
+        museo=self._museo_dao.get_musei()
+        return museo
         # TODO
 

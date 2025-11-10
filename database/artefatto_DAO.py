@@ -8,11 +8,10 @@ from model.artefattoDTO import Artefatto
 
 class ArtefattoDAO:
     def __init__(self):
-        # La fonte della connessione
-        self.connection = ConnessioneDB.get_connection()
+        pass
 
     def dividi_per_epoche(self):
-        conn= self.connection
+        conn= ConnessioneDB.get_connection()
         epoche=[]
 
         if conn is None:
@@ -20,17 +19,17 @@ class ArtefattoDAO:
             return []
         try:
             cursor = conn.cursor()
-            query = 'SELECT DISTINCT epoca FROM musei_torino.artefatto ORDER BY epoca'
+            query = 'SELECT DISTINCT epoca FROM musei_torino.artefatto WHERE epoca IS NOT NULL ORDER BY epoca'
             cursor.execute(query)
 
             for (epoca,) in cursor:
                 if epoca is not None:
                     epoche.append(epoca)
 
-                cursor.close()
-                conn.close()
-                return epoche
-                # La funzione ritornerà una lista che contiene tutte le epoche (senza ripetizioni) presenti nel database
+            cursor.close()
+            conn.close()
+            return epoche
+            # La funzione ritornerà una lista che contiene tutte le epoche (senza ripetizioni) presenti nel database
         except Exception as e:
             print(f'Errore di connessione: {e}')
             if conn:
@@ -38,7 +37,7 @@ class ArtefattoDAO:
             return []
 
     def estrai_artefatto(self, museo_input:str, epoca_input:str):
-        conn=self.connection
+        conn=ConnessioneDB.get_connection()
         risultato=[]
 
         if conn is None:
@@ -46,21 +45,14 @@ class ArtefattoDAO:
             return []
 
         try:
-            cursor = conn.cursor()
+            cursor = conn.cursor(dictionary=True)
+
             query=""" 
             SELECT a.id, a.nome, a.tipologia, a.epoca, a.id_museo
             FROM musei_torino.artefatto a, musei_torino.museo m 
-            WHERE a.id_museo=m.id
+            WHERE a.id_museo=m.id AND m.nome=COALESCE(%s, m.nome) AND a.epoca=COALESCE(%s, a.epoca)
+            ORDER BY a.nome 
             """ # Con questa prima query selezioniamo gli artefatti facendo un join tra l'id della tabella museo e l'id della tabella artefatto
-
-            if museo_input is not None:
-                # Se l'input del nome del museo non è nullo, allora possiamo procedere ad aggiungere alla query il nome del museo da ricercare
-                query += 'AND m.nome=%s' # Il nome del museo in cui vogliamo cercare l'artefatto è dato in input tramite l'app
-
-            if epoca_input is not None:
-                query += 'AND COALESCE(%s, epoca)' # L'epoca dell'artefatto selezionate nell'interfaccia
-
-            query += 'ORDER BY a.nome'
 
             cursor.execute(query, (museo_input, epoca_input))
 

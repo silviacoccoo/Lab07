@@ -36,7 +36,8 @@ class View:
         self.txt_titolo = ft.Text(value="Musei di Torino", size=38, weight=ft.FontWeight.BOLD)
 
         # --- Sezione 2: Filtraggio ---
-
+        self.dropdown_musei=ft.Dropdown(label='Museo', width=300, on_change=self.controller.seleziona_museo)
+        self.dropdown_epoche=ft.Dropdown(label='Epoca', width=300, on_change=self.controller.seleziona_epoca)
         # TODO
 
         # Sezione 3: Artefatti
@@ -56,8 +57,8 @@ class View:
             ft.Divider(),
 
             # Sezione 2: Filtraggio
+            ft.Row(controls=[self.dropdown_musei, self.dropdown_epoche], alignment=ft.MainAxisAlignment.CENTER),
             ft.Divider(),
-
             # TODO
 
             # Sezione 3: Artefatti
@@ -65,6 +66,9 @@ class View:
             self.lista_artefatti,
             # TODO
         )
+
+        if self.controller:
+            self.controller.popola_dropdown()
 
         self.page.scroll = "adaptive"
         self.page.update()
