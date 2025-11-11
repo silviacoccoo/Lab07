@@ -24,7 +24,6 @@ class Model:
     def get_epoche(self):
         """Restituisce la lista di tutte le epoche."""
         epoche_db=self._artefatto_dao.dividi_per_epoche() # Recupero le epoche
-        epoche_db.insert(0, 'Nessun filtro')
         return epoche_db
         # TODO
 

@@ -24,7 +24,7 @@ class Controller:
         option_musei=[ft.dropdown.Option(key=None, text='Nessun filtro')] # Inizializzo la lista di opzioni con l'opzione Nessun filtro
         # A nessun filtro corrisponde la chiave None
 
-        # Successivamente aggiungiamo a quetsa lista di opzioni tutti gli altri musei del database
+        # Successivamente aggiungiamo a questa lista di opzioni tutti gli altri musei del database
         if musei: # Se esiste la lista di musei
             for museo in musei:
                 option_musei.append(ft.dropdown.Option(key=museo.nome, text=museo.nome)) # Aggiungo il museo ai musei attraverso il comando ft.dropdown.Option
