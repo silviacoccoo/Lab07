@@ -12,36 +12,29 @@ class MuseoDAO:
 
     def get_musei(self):
         conn=ConnessioneDB.get_connection()
-        risultato=[]
+        musei=[]
 
         if conn is None:
             print('Errore nella connessione')
             return []
+        cursor=conn.cursor(dictionary=True)
+        query="""
+        SELECT *
+        FROM musei_torino.museo 
+        ORDER BY nome
+        """
+        cursor.execute(query)
 
-        try:
-            cursor=conn.cursor(dictionary=True)
-            query="""
-            SELECT *
-            FROM musei_torino.museo 
-            ORDER BY nome
-            """
-            cursor.execute(query)
+        # Creo l'oggetto museo
+        for row in cursor:
+            museo=Museo(
+                id=row['id'],
+                nome=row['nome'],
+                tipologia=row['tipologia'],
+            )
+            musei.append(museo)
 
-            # Creo l'oggetto museo
-            for row in cursor:
-                museo=Museo(
-                    id=row['id'],
-                    nome=row['nome'],
-                    tipologia=row['tipologia'],
-                )
-                risultato.append(museo)
-
-            cursor.close()
-            conn.close()
-            return risultato
-        except Exception as e:
-            print(f'Errore di connessione: {e}')
-            if conn:
-                conn.close()
-            return []
+        cursor.close()
+        conn.close()
+        return musei # Questa funzione, come dividi_per_epoche(), restituisce una lista. In questo caso contiene oggetti relativi a ciascun museo
     # TODO

@@ -52,7 +52,7 @@ class View:
         self.page.add(
             self.toggle_cambia_tema,
 
-            # Sezione 1
+            # Sezione 1: Titolo
             self.txt_titolo,
             ft.Divider(),
 
